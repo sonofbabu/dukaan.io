@@ -111,23 +111,11 @@ class HomeViewController: UIViewController {
     
     func configureTableView(){
         // Create Scroll view
+        homeScrollView.frame = view.frame
         view.addSubview(homeScrollView)
-        homeScrollView.translatesAutoresizingMaskIntoConstraints = false
-        homeScrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        homeScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        homeScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
-        homeScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
-        homeScrollView.isScrollEnabled = true
-        
         // Create Mian view
+        mainView.frame = homeScrollView.frame
         self.homeScrollView.addSubview(self.mainView)
-        mainView.translatesAutoresizingMaskIntoConstraints = false
-        mainView.topAnchor.constraint(equalTo: homeScrollView.topAnchor).isActive = true
-        mainView.bottomAnchor.constraint(equalTo: homeScrollView.bottomAnchor).isActive = true
-        mainView.leadingAnchor.constraint(equalTo: homeScrollView.leadingAnchor, constant: 0).isActive = true
-        mainView.trailingAnchor.constraint(equalTo: homeScrollView.trailingAnchor, constant: 0).isActive = true
-        mainView.backgroundColor = .white
-        
         // Create Top View
         topView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 130))
         topView.backgroundColor = .white
@@ -165,7 +153,6 @@ class HomeViewController: UIViewController {
         collectionViewContainer = UIView(frame: CGRect(x: 0, y: topView.frame.size.height, width: view.frame.size.width, height: 180))
         self.mainView.addSubview(collectionViewContainer)
         let collectionHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
-        
         collectionHeaderView.backgroundColor = .clear
         collectionViewContainer.addSubview(collectionHeaderView)
         let collectionHeaderLabel = UILabel(frame: CGRect(x: 20, y: 0, width: view.frame.size.width-20, height: 40))
@@ -173,7 +160,7 @@ class HomeViewController: UIViewController {
         collectionHeaderLabel.textColor = UIColor(hexFromString: "#1A181E")
         collectionHeaderLabel.text = "Bestsellers"
         collectionHeaderView.addSubview(collectionHeaderLabel)
-        view.addSubview(collectionView)
+        self.mainView.addSubview(collectionView)
         collectionView.backgroundColor = .white
         collectionView.topAnchor.constraint(equalTo: collectionViewContainer.topAnchor, constant: 40).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: collectionViewContainer.leadingAnchor, constant: 0).isActive = true
@@ -195,11 +182,7 @@ class HomeViewController: UIViewController {
         homeTableView.bottomAnchor.constraint(equalTo: tableViewContainer.bottomAnchor).isActive = true
         homeTableView.leadingAnchor.constraint(equalTo: tableViewContainer.leadingAnchor, constant: 0).isActive = true
         homeTableView.trailingAnchor.constraint(equalTo: tableViewContainer.trailingAnchor, constant: 0).isActive = true
-        
-        
     }
-    
-
 }
 
 // MARK:- Extension Of VC for table view delegate and datasource
@@ -271,8 +254,6 @@ extension HomeViewController: UITableViewDelegate,UITableViewDataSource {
           UIView.animate(withDuration: 0, animations: {
             self.homeTableView.layoutIfNeeded()
           }) { complete in
-            // Edit heightOfTableViewConstraint's constant to update height of table view
-//            self.tableViewContainer.heightAnchor.constraint(equalToConstant: self.HomeTableView.contentSize.height).isActive = true
             self.tableViewContainer.frame.size.height = self.homeTableView.contentSize.height
             self.adsViewContainer = UIView(frame: CGRect(x: 0, y: (self.tableViewContainer.frame.origin.y + self.tableViewContainer.frame.size.height), width: self.view.frame.size.width, height: 300))
             self.adsViewContainer.backgroundColor = UIColor(hexFromString: "#1A181E")
@@ -281,7 +262,7 @@ extension HomeViewController: UITableViewDelegate,UITableViewDataSource {
             adsImage.image = UIImage(named: "ads")
             adsImage.contentMode = .scaleAspectFit
             self.adsViewContainer.addSubview(adsImage)
-            self.mainView.heightAnchor.constraint(equalToConstant: self.homeTableView.contentSize.height + self.topView.frame.size.height + self.collectionViewContainer.frame.size.height + self.adsViewContainer.frame.size.height).isActive = true
+            self.homeScrollView.contentSize = CGSize(width: self.view.frame.size.width, height: (self.homeTableView.contentSize.height + self.topView.frame.size.height + self.collectionViewContainer.frame.size.height + self.adsViewContainer.frame.size.height))
           }
         }
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
